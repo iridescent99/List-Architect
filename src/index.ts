@@ -1,6 +1,12 @@
 import {Plugin} from "obsidian";
 import {ListArchitectSettingsTab} from "./settings";
 import {addCommands} from "./commands";
+import {Tools} from "./tools";
+import {FuzzySuggester} from "./handlers/FuzzySuggester";
+import {TaskModifier} from "./handlers/TaskModifier";
+import {ActionSuggester} from "./handlers/ActionSuggester";
+import {Architect} from "./architect/Architect";
+import {TextInputModal} from "./handlers/TextInputModal";
 
 export interface ListConfiguration {
     path: string;
@@ -12,17 +18,31 @@ export interface Settings {
 }
 
 export const DEFAULT_SETTINGS: Settings = {
-    lists: [],
+    lists: [{
+        path: "GENERAL.Lists/list.md"
+    }],
 
 }
 
 export default class ListArchitect extends Plugin {
 
+    tools: Tools = new Tools(this);
     settings: Settings;
+    fuzzySuggester: FuzzySuggester;
+    actionSuggester: ActionSuggester;
+    textInputModal: TextInputModal;
+    taskModifier: TaskModifier;
+    architect: Architect;
 
     async onload() {
 
         console.log(`Loading ${this.manifest.name} (${this.manifest.version})`);
+
+
+        this.fuzzySuggester = new FuzzySuggester(this);
+        this.actionSuggester = new ActionSuggester(this);
+        this.taskModifier = new TaskModifier(this);
+        this.architect = new Architect(this);
 
         await this.loadSettings();
 

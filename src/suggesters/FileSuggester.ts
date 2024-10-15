@@ -1,11 +1,8 @@
 // Credits go to Liam's Periodic Notes Plugin: https://github.com/liamcain/obsidian-periodic-notes
-
 import { TAbstractFile, TFile } from "obsidian";
 import { TextInputSuggest } from "./suggest";
-import { get_tfiles_from_folder } from "utils/Utils";
 import ListArchitect from "../index";
-import { errorWrapperSync } from "utils/Error";
-
+import {errorWrapperSync} from "../utils/Error";
 export enum FileSuggestMode {
     TemplateFiles,
     ScriptFiles,
@@ -15,24 +12,19 @@ export class FileSuggest extends TextInputSuggest<TFile> {
     constructor(
         public inputEl: HTMLInputElement,
         private plugin: ListArchitect,
-        private mode: FileSuggestMode
+
     ) {
         super(inputEl);
     }
 
-    get_error_msg(mode: FileSuggestMode): string {
-        switch (mode) {
-            case FileSuggestMode.TemplateFiles:
-                return `Templates folder doesn't exist`;
-            case FileSuggestMode.ScriptFiles:
-                return `User Scripts folder doesn't exist`;
-        }
+    get_error_msg() {
+        return "File doesn't exist."
     }
 
     getSuggestions(input_str: string): TFile[] {
         const all_files = errorWrapperSync(
-            () => get_tfiles_from_folder(this.get_folder(this.mode)),
-            this.get_error_msg(this.mode)
+            () => this.plugin.tools.getFiles([input_str]),
+            this.get_error_msg()
         );
         if (!all_files) {
             return [];

@@ -1,6 +1,7 @@
 import {PluginSettingTab, App, Setting} from "obsidian";
 import {ListConfiguration} from "./index";
 import ListArchitect from "./index";
+import {FileSuggest} from "./suggesters/FileSuggester";
 
 export class ListArchitectSettingsTab extends PluginSettingTab {
 
@@ -21,20 +22,39 @@ export class ListArchitectSettingsTab extends PluginSettingTab {
         this.plugin.settings.lists.forEach((list, index) => {
             const s = new Setting(this.containerEl)
                 .addSearch((cb) => {
-                    new FileSuggest(cb.inputEl, this.plugin, )
+                    new FileSuggest(cb.inputEl, this.plugin);
+                    cb.setPlaceholder("Example: folderA/list.md")
+                        .setValue(list.path)
+                        .onChange((path: string) => {
+                            this.plugin.settings.lists[index].path = path;
+                            this.plugin.saveSettings();
+                        })})
+                .addExtraButton((cb) => {
+                    cb.setIcon("cross")
+                        .setTooltip("Delete")
+                        .onClick(() => {
+                            this.plugin.settings.lists.splice(
+                                index,
+                                1
+                            );
+                            this.plugin.saveSettings();
+                            this.display();
+                        });
+                });
+        })
+
+        new Setting(this.containerEl).addButton((cb) => {
+            cb.setButtonText("Add list location")
+                .onClick(() => {
+                    this.plugin.settings.lists.push({path: "Example/new_list.md"});
+                    this.plugin.saveSettings();
+                    this.display();
             })
         })
 
     }
 
-    addListConfigItem( list?: ListConfiguration ) {
-        const container = this.configContainer.createDiv({ cls: "list-config-item" });
-        new Setting(this.configContainer)
-            .addSearch((cb) => {
-                new FileSugges
-            })
-        container.createEl("button", { text: "+" });
-    }
+
 
     addArraySetting(settingTitle: string, settingReference: string, description = "") {
         const { containerEl } = this;
