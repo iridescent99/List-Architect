@@ -2,6 +2,7 @@ import {PluginSettingTab, App, Setting} from "obsidian";
 import {ListConfiguration} from "./index";
 import ListArchitect from "./index";
 import {FileSuggest} from "./suggesters/FileSuggester";
+import {FolderSuggest} from "./suggesters/FolderSuggester";
 
 export class ListArchitectSettingsTab extends PluginSettingTab {
 
@@ -50,7 +51,46 @@ export class ListArchitectSettingsTab extends PluginSettingTab {
                     this.plugin.saveSettings();
                     this.display();
             })
+        });
+
+        new Setting(this.containerEl).setName("List folder").setHeading();
+        const desc = document.createDocumentFragment();
+        desc.append(
+            "Any file within the selected folder will be regarded as a list."
+        );
+
+        this.plugin.settings.folders.forEach((folder, index) => {
+            const s = new Setting(this.containerEl)
+                .addSearch((cb) => {
+                    new FolderSuggest(cb.inputEl);
+                    cb.setPlaceholder("Example: folderA/folderB")
+                        .setValue(folder)
+                        .onChange((path: string) => {
+                            this.plugin.settings.folders[index] = path;
+                            this.plugin.saveSettings();
+                        })})
+                .addExtraButton((cb) => {
+                    cb.setIcon("cross")
+                        .setTooltip("Delete")
+                        .onClick(() => {
+                            this.plugin.settings.lists.splice(
+                                index,
+                                1
+                            );
+                            this.plugin.saveSettings();
+                            this.display();
+                        });
+                });
         })
+
+        new Setting(this.containerEl).addButton((cb) => {
+            cb.setButtonText("Add folder")
+                .onClick(() => {
+                    this.plugin.settings.folders.push("Examplefolder");
+                    this.plugin.saveSettings();
+                    this.display();
+                })
+        });
 
     }
 

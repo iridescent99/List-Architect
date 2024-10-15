@@ -15,13 +15,14 @@ export interface ListConfiguration {
 
 export interface Settings {
     lists: ListConfiguration[];
+    folders: string[];
 }
 
 export const DEFAULT_SETTINGS: Settings = {
     lists: [{
         path: "GENERAL.Lists/list.md"
     }],
-
+    folders: ["GENERAL.Lists"]
 }
 
 export default class ListArchitect extends Plugin {

@@ -21,7 +21,7 @@ export class FuzzySuggester extends FuzzySuggestModal<TFile> {
 
     getItems(): TFile[] {
         const files = errorWrapperSync(
-            () => this.plugin.tools.getFiles(this.plugin.settings.lists.map((list: ListConfiguration) => list.path)),
+            () => this.plugin.tools.getFiles([...this.plugin.settings.lists.map((list: ListConfiguration) => list.path), ...this.plugin.settings.folders]),
             `No list locations configured`
         );
         if (!files) {
