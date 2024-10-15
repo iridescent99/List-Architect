@@ -5,7 +5,7 @@ import {log_error} from "../utils/Log";
 
 export enum OpenMode {
     SelectNote,
-    AddListItem,
+    SelectHeading,
 }
 
 export class FuzzySuggester extends FuzzySuggestModal<TFile> {
@@ -35,7 +35,7 @@ export class FuzzySuggester extends FuzzySuggestModal<TFile> {
     }
 
     onChooseItem(item: TFile): void {
-        this.plugin.taskModifier.activateList(item);
+        this.plugin.architect.activateList(item);
         this.plugin.actionSuggester.open()
     }
 

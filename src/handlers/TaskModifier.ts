@@ -27,11 +27,6 @@ export class TaskModifier extends Modal {
         }
     }
 
-    public activateList( file: TFile ){
-        this.activeList = file;
-        // TODO: Read tasks
-    }
-
     private addMode() {
         const input = this.containerEl.createEl("input", { placeholder: "Type list item.." })
         input.addEventListener("change", (e) => {

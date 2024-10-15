@@ -1,12 +1,14 @@
 import ListArchitect from "../index";
-import {ButtonComponent, Modal, TextComponent} from "obsidian";
+import {ButtonComponent, Modal, TextAreaComponent, TextComponent} from "obsidian";
 
 export class TextInputModal extends Modal {
     inputText: string = '';
-    callback: (input: string) => void;
+    plugin: ListArchitect;
+    callback: (plugin: ListArchitect, input: string) => void;
 
     constructor(plugin: ListArchitect) {
         super(plugin.app);
+        this.plugin = plugin;
     }
 
     onOpen() {
@@ -14,9 +16,9 @@ export class TextInputModal extends Modal {
         this.contentEl.createEl('h2', { text: 'Enter your text' });
 
         // Create a text input field
-        const input = new TextComponent(this.contentEl);
+        const input = new TextAreaComponent(this.contentEl);
         input.inputEl.style.width = '100%';
-        input.setPlaceholder('Type something...');
+        input.setPlaceholder('Type something in markdown..');
 
         // Handle text input changes
         input.onChange(value => {
@@ -28,7 +30,7 @@ export class TextInputModal extends Modal {
         submitButton.setButtonText('Submit');
         submitButton.onClick(() => {
             // Call the callback with the input text
-            this.callback(this.inputText);
+            this.callback(this.plugin, this.inputText);
             this.close(); // Close the modal after submission
         });
     }

@@ -9,9 +9,7 @@ export class Architect {
 
     plugin: ListArchitect;
     activeList: List;
-    mode: ACTION;
     textInputModal: TextInputModal;
-    content: string[];
 
     constructor( plugin: ListArchitect ) {
         this.plugin = plugin;
@@ -19,17 +17,22 @@ export class Architect {
     }
 
     public activateList( file: TFile ){
-        this.activeList = new List(file);
-        // TODO: Read tasks
+        this.activeList = new List(this.plugin, file);
+        this.activeList.initialize();
     }
 
-    public addTask() {
+    public addTask( ) {
         this.textInputModal.callback = this.processAddition;
         this.textInputModal.open();
     }
 
-    public processAddition() {
 
+    public processAddition( plugin: ListArchitect, task: string ) {
+        // if (this.activeList.headings.length > 0) {
+        //
+        // } else {
+        plugin.architect.activeList.addItem( task )
+        // }
     }
 
 
