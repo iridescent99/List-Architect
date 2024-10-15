@@ -1,0 +1,11 @@
+{
+  "id": "list-architect",
+  "name": "List Architect",
+  "version": "0.0.1",
+  "minAppVersion": "0.15.0",
+  "description": "An Obsidian plugin that allows users to quickly modify any list.",
+  "author": "iridescent99",
+  "authorUrl": "https://obsidian.md",
+  "fundingUrl": "https://obsidian.md/pricing",
+  "isDesktopOnly": false
+}
