@@ -34,6 +34,17 @@ export class List {
         this.saveContent();
     }
 
+    public deleteItem( task: string ) {
+        this.content = this.content.filter((line: string) => line !== task);
+        this.saveContent();
+    }
+
+    public modifyItem( task: string, index: number ) {
+        console.log(task, index)
+        this.content.splice(index, 1, task);
+        this.saveContent();
+    }
+
     private async saveContent() {
         await this.plugin.app.vault.modify(this.file, this.content.join("\n"));
     }

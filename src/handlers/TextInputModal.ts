@@ -1,14 +1,36 @@
 import ListArchitect from "../index";
 import {ButtonComponent, Modal, TextAreaComponent, TextComponent} from "obsidian";
 
+export enum EditMode {
+    modify,
+    add
+}
+
 export class TextInputModal extends Modal {
     inputText: string = '';
     plugin: ListArchitect;
-    callback: (plugin: ListArchitect, input: string) => void;
+    private mode: EditMode;
+    private callback: Function;
 
     constructor(plugin: ListArchitect) {
         super(plugin.app);
         this.plugin = plugin;
+    }
+
+    public enableModificationMode( task: string ) {
+        this.mode = EditMode.modify;
+        this.inputText = task;
+        return this;
+    }
+
+    public enableAdditionMode() {
+        this.mode = EditMode.add;
+        return this;
+    }
+
+    public setCallback( fn: Function ) {
+        this.callback = fn;
+        return this;
     }
 
     onOpen() {
@@ -18,7 +40,8 @@ export class TextInputModal extends Modal {
         // Create a text input field
         const input = new TextAreaComponent(this.contentEl);
         input.inputEl.style.width = '100%';
-        input.setPlaceholder('Type something in markdown..');
+        if (this.mode === EditMode.add) input.setPlaceholder('Type something in markdown..');
+        if (this.mode === EditMode.modify) input.setValue(this.inputText);
 
         // Handle text input changes
         input.onChange(value => {

@@ -17,8 +17,9 @@ export class ActionSuggester extends SuggestModal<any> {
     }
 
     onChooseSuggestion(item: any, evt: MouseEvent | KeyboardEvent) {
-        this.plugin.taskModifier.mode = item;
-        this.plugin.architect.addTask();
+        if (item === ACTION.ADD) this.plugin.architect.addTask();
+        if (item === ACTION.DELETE) this.plugin.architect.deleteTask();
+        if (item === ACTION.MODIFY) this.plugin.architect.modifyTask();
     }
 
     renderSuggestion(action: string, el: HTMLElement) {

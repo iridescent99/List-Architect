@@ -1,6 +1,5 @@
 import ListArchitect from "../index";
 import {Modal, TFile} from "obsidian";
-import {ACTION} from "../handlers/ActionSuggester";
 import {TextInputModal} from "../handlers/TextInputModal";
 import {List} from "./List";
 
@@ -22,20 +21,42 @@ export class Architect {
     }
 
     public addTask( ) {
-        this.textInputModal.callback = this.processAddition;
-        this.textInputModal.open();
+        this.textInputModal
+            .enableAdditionMode()
+            .setCallback(this.processAddition)
+            .open();
     }
 
+    public deleteTask() {
+        this.plugin.fuzzySuggester
+            .enableDeleteTaskMode( this.activeList.content )
+            .setCallback(this.processDeletion)
+            .start();
+    }
+
+    public modifyTask() {
+        this.plugin.fuzzySuggester
+            .enableModifyTaskMode( this.activeList.content )
+            .setCallback(( plugin: ListArchitect, task: string, index: number ) => {
+                this.textInputModal
+                    .enableModificationMode( task )
+                    .setCallback((plugin: ListArchitect, modifiedTask: string) => this.processModification(plugin, modifiedTask, index))
+                    .open()
+            })
+            .start();
+    }
 
     public processAddition( plugin: ListArchitect, task: string ) {
-        // if (this.activeList.headings.length > 0) {
-        //
-        // } else {
         plugin.architect.activeList.addItem( task )
-        // }
     }
 
+    public processDeletion( plugin: ListArchitect, task: string) {
+        plugin.architect.activeList.deleteItem( task )
+    }
 
+    public processModification( plugin: ListArchitect, task: string, index: number ) {
+        plugin.architect.activeList.modifyItem(task, index)
+    }
 
 
 }

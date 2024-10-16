@@ -3,7 +3,6 @@ import {ListArchitectSettingsTab} from "./settings";
 import {addCommands} from "./commands";
 import {Tools} from "./tools";
 import {FuzzySuggester} from "./handlers/FuzzySuggester";
-import {TaskModifier} from "./handlers/TaskModifier";
 import {ActionSuggester} from "./handlers/ActionSuggester";
 import {Architect} from "./architect/Architect";
 import {TextInputModal} from "./handlers/TextInputModal";
@@ -31,8 +30,6 @@ export default class ListArchitect extends Plugin {
     settings: Settings;
     fuzzySuggester: FuzzySuggester;
     actionSuggester: ActionSuggester;
-    textInputModal: TextInputModal;
-    taskModifier: TaskModifier;
     architect: Architect;
 
     async onload() {
@@ -42,7 +39,6 @@ export default class ListArchitect extends Plugin {
 
         this.fuzzySuggester = new FuzzySuggester(this);
         this.actionSuggester = new ActionSuggester(this);
-        this.taskModifier = new TaskModifier(this);
         this.architect = new Architect(this);
 
         await this.loadSettings();
