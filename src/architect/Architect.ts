@@ -1,7 +1,7 @@
 import ListArchitect from "../index";
 import {Modal, TFile} from "obsidian";
 import {TextInputModal} from "../handlers/TextInputModal";
-import {List} from "./List";
+import {List, Task} from "./List";
 
 
 export class Architect {
@@ -29,34 +29,44 @@ export class Architect {
 
     public deleteTask() {
         this.plugin.fuzzySuggester
-            .enableDeleteTaskMode( this.activeList.content )
+            .enableDeleteTaskMode( this.activeList.tasks )
             .setCallback(this.processDeletion)
+            .start();
+    }
+
+    public checkTask() {
+        this.plugin.fuzzySuggester
+            .enableCheckTaskMode( this.activeList.tasks )
+            .setCallback(this.processCheck)
             .start();
     }
 
     public modifyTask() {
         this.plugin.fuzzySuggester
-            .enableModifyTaskMode( this.activeList.content )
-            .setCallback(( plugin: ListArchitect, task: string, index: number ) => {
+            .enableModifyTaskMode( this.activeList.tasks )
+            .setCallback(( plugin: ListArchitect, task: Task) => {
                 this.textInputModal
                     .enableModificationMode( task )
-                    .setCallback((plugin: ListArchitect, modifiedTask: string) => this.processModification(plugin, modifiedTask, index))
+                    .setCallback((plugin: ListArchitect, modifiedTask: Task) => this.processModification(plugin, modifiedTask))
                     .open()
             })
             .start();
     }
 
-    public processAddition( plugin: ListArchitect, task: string ) {
+    public processAddition( plugin: ListArchitect, task: Task ) {
         plugin.architect.activeList.addItem( task )
     }
 
-    public processDeletion( plugin: ListArchitect, task: string) {
+    public processDeletion( plugin: ListArchitect, task: Task ) {
         plugin.architect.activeList.deleteItem( task )
     }
 
-    public processModification( plugin: ListArchitect, task: string, index: number ) {
-        plugin.architect.activeList.modifyItem(task, index)
+    public processModification( plugin: ListArchitect, task: Task ) {
+        plugin.architect.activeList.modifyItem(task)
     }
 
+    public processCheck( plugin: ListArchitect, task: Task ) {
+        plugin.architect.activeList.checkItem(task);
+    }
 
 }

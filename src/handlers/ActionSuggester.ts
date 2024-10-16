@@ -4,7 +4,8 @@ import ListArchitect from "../index";
 export enum ACTION {
     ADD="add",
     DELETE="delete",
-    MODIFY="modify"
+    MODIFY="modify",
+    CHECK="check"
 }
 
 export class ActionSuggester extends SuggestModal<any> {
@@ -20,6 +21,7 @@ export class ActionSuggester extends SuggestModal<any> {
         if (item === ACTION.ADD) this.plugin.architect.addTask();
         if (item === ACTION.DELETE) this.plugin.architect.deleteTask();
         if (item === ACTION.MODIFY) this.plugin.architect.modifyTask();
+        if (item === ACTION.CHECK) this.plugin.architect.checkTask();
     }
 
     renderSuggestion(action: string, el: HTMLElement) {
