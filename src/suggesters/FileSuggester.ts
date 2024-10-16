@@ -2,7 +2,6 @@
 import { TAbstractFile, TFile } from "obsidian";
 import { TextInputSuggest } from "./suggest";
 import ListArchitect from "../index";
-import {errorWrapperSync} from "../utils/Error";
 export enum FileSuggestMode {
     TemplateFiles,
     ScriptFiles,
@@ -22,10 +21,7 @@ export class FileSuggest extends TextInputSuggest<TFile> {
     }
 
     getSuggestions(input_str: string): TFile[] {
-        const all_files = errorWrapperSync(
-            () => this.plugin.tools.getFiles([input_str]),
-            this.get_error_msg()
-        );
+        const all_files = this.plugin.tools.getFiles([input_str]);
         if (!all_files) {
             return [];
         }

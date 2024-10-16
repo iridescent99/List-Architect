@@ -114,7 +114,8 @@ export class List {
     }
 
     public modifyItem( task: Task ) {
-        this.content.splice(task.lineNumber, 1, task.raw);
+        console.log(task)
+        this.content.splice(task.lineNumber, 1, `${this.computePrefix(task)}${task.formatted}`);
         this.saveContent();
     }
 

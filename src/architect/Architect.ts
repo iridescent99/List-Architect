@@ -9,6 +9,7 @@ export class Architect {
     plugin: ListArchitect;
     activeList: List;
     textInputModal: TextInputModal;
+    automaticDetection: boolean = false;
 
     constructor( plugin: ListArchitect ) {
         this.plugin = plugin;
@@ -47,7 +48,7 @@ export class Architect {
             .setCallback(( plugin: ListArchitect, task: Task) => {
                 this.textInputModal
                     .enableModificationMode( task )
-                    .setCallback((plugin: ListArchitect, modifiedTask: Task) => this.processModification(plugin, modifiedTask))
+                    .setCallback(this.processModification)
                     .open()
             })
             .start();
@@ -62,6 +63,7 @@ export class Architect {
     }
 
     public processModification( plugin: ListArchitect, task: Task ) {
+        console.log(task)
         plugin.architect.activeList.modifyItem(task)
     }
 

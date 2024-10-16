@@ -18,10 +18,14 @@ export class ListArchitectSettingsTab extends PluginSettingTab {
         this.containerEl.empty();
         this.containerEl.createEl('h1', {text:'List Architect'});
         this.configContainer = this.containerEl.createDiv({cls: "list-config-container"});
-        new Setting(this.containerEl).setName("List locations").setHeading();
+        new Setting(this.containerEl)
+            .setName("List locations")
+            .setHeading()
+            .setDesc("Here individual file locations can be added that one wants to include.");
 
+        const s = this.containerEl.createDiv()
         this.plugin.settings.lists.forEach((list, index) => {
-            const s = new Setting(this.containerEl)
+            new Setting(s)
                 .addSearch((cb) => {
                     new FileSuggest(cb.inputEl, this.plugin);
                     cb.setPlaceholder("Example: folderA/list.md")
@@ -42,8 +46,7 @@ export class ListArchitectSettingsTab extends PluginSettingTab {
                             this.display();
                         });
                 });
-        })
-
+        });
         new Setting(this.containerEl).addButton((cb) => {
             cb.setButtonText("Add list location")
                 .onClick(() => {
@@ -53,11 +56,9 @@ export class ListArchitectSettingsTab extends PluginSettingTab {
             })
         });
 
-        new Setting(this.containerEl).setName("List folder").setHeading();
-        const desc = document.createDocumentFragment();
-        desc.append(
-            "Any file within the selected folder will be regarded as a list."
-        );
+        new Setting(this.containerEl)
+            .setName("List folder")
+            .setDesc("Any file within the selected folder will be regarded as a list.");
 
         this.plugin.settings.folders.forEach((folder, index) => {
             const s = new Setting(this.containerEl)
@@ -73,7 +74,7 @@ export class ListArchitectSettingsTab extends PluginSettingTab {
                     cb.setIcon("cross")
                         .setTooltip("Delete")
                         .onClick(() => {
-                            this.plugin.settings.lists.splice(
+                            this.plugin.settings.folders.splice(
                                 index,
                                 1
                             );
@@ -83,7 +84,8 @@ export class ListArchitectSettingsTab extends PluginSettingTab {
                 });
         })
 
-        new Setting(this.containerEl).addButton((cb) => {
+        new Setting(this.containerEl)
+            .addButton((cb) => {
             cb.setButtonText("Add folder")
                 .onClick(() => {
                     this.plugin.settings.folders.push("Examplefolder");
@@ -92,6 +94,13 @@ export class ListArchitectSettingsTab extends PluginSettingTab {
                 })
         });
 
+        new Setting(this.containerEl)
+            .setName("Automatic detection")
+            .setHeading()
+            .setDesc("When turned on, the plugin will automatically detect files that contain tasks and the settings above will be ignored.")
+            .addToggle((cb) => {
+                cb.onChange((value) => this.plugin.architect.automaticDetection = value)
+            });
     }
 
 

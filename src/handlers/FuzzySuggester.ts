@@ -1,7 +1,5 @@
-import { FuzzySuggestModal, TFile, TFolder, normalizePath } from "obsidian";
+import { FuzzySuggestModal, TFile, TFolder } from "obsidian";
 import ListArchitect, {ListConfiguration} from "../index";
-import {errorWrapperSync} from "../utils/Error";
-import {log_error} from "../utils/Log";
 import {Task} from "../architect/List";
 
 export enum OpenMode {
@@ -27,10 +25,7 @@ export class FuzzySuggester extends FuzzySuggestModal<TFile|Task> {
     getItems(): TFile[]|Task[] {
         let items: TFile[]|Task[] = [];
         if (this.openMode === OpenMode.selectNote) {
-            items = errorWrapperSync(
-                () => this.plugin.tools.getFiles([...this.plugin.settings.lists.map((list: ListConfiguration) => list.path), ...this.plugin.settings.folders]),
-                `No list locations configured`
-            );
+            items = this.plugin.tools.getFiles([...this.plugin.settings.lists.map((list: ListConfiguration) => list.path), ...this.plugin.settings.folders])
         } else {
             return this.tasks;
         }
@@ -58,7 +53,7 @@ export class FuzzySuggester extends FuzzySuggestModal<TFile|Task> {
         try {
             this.open();
         } catch (e) {
-            log_error(e);
+            throw e;
         }
     }
 
