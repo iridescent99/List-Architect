@@ -1,4 +1,5 @@
 // Credits go to Liam's Periodic Notes Plugin: https://github.com/liamcain/obsidian-periodic-notes
+
 import { TAbstractFile, TFile } from "obsidian";
 import { TextInputSuggest } from "./suggest";
 import ListArchitect from "../index";

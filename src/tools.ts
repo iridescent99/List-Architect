@@ -21,4 +21,8 @@ export class Tools {
             });
     }
 
+    public getTaskFiles() {
+
+    }
+
 }

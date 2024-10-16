@@ -94,13 +94,6 @@ export class ListArchitectSettingsTab extends PluginSettingTab {
                 })
         });
 
-        new Setting(this.containerEl)
-            .setName("Automatic detection")
-            .setHeading()
-            .setDesc("When turned on, the plugin will automatically detect files that contain tasks and the settings above will be ignored.")
-            .addToggle((cb) => {
-                cb.onChange((value) => this.plugin.architect.automaticDetection = value)
-            });
     }
 
 

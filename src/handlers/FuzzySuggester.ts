@@ -25,7 +25,7 @@ export class FuzzySuggester extends FuzzySuggestModal<TFile|Task> {
     getItems(): TFile[]|Task[] {
         let items: TFile[]|Task[] = [];
         if (this.openMode === OpenMode.selectNote) {
-            items = this.plugin.tools.getFiles([...this.plugin.settings.lists.map((list: ListConfiguration) => list.path), ...this.plugin.settings.folders])
+            items = this.plugin.architect.automaticDetection ? this.plugin.tools.getTaskFiles() : this.plugin.tools.getFiles([...this.plugin.settings.lists.map((list: ListConfiguration) => list.path), ...this.plugin.settings.folders])
         } else {
             return this.tasks;
         }

@@ -15,7 +15,7 @@ A large vault makes looking up the list files every time you quickly want to add
 
 #### Modifying existing tasks
 
-![modify_task.mp4 [video-to-gif output image]](https://s5.ezgif.com/tmp/ezgif-5-f88f82b559.gif)
+![modify_task.mp4 [video-to-gif output image]](https://s3.ezgif.com/tmp/ezgif-3-603a2f8ea8.gif)
 
 #### Checking tasks
 
