@@ -55,7 +55,7 @@ export class TextInputModal extends Modal {
 
     onOpen() {
         // Create a text input field
-        if (this.plugin.architect.activeList.headings.length > 0) {
+        if (this.mode === EditMode.add && this.plugin.architect.activeList.headings.length > 0) {
             const headerDropdown = new DropdownComponent(this.contentEl);
             headerDropdown.addOption("", "No header");
             for (let header of this.plugin.architect.activeList.headings) {
@@ -67,7 +67,7 @@ export class TextInputModal extends Modal {
                     this.activeTask.lineNumber = this.plugin.architect.activeList.noHeadingTasks()[this.plugin.architect.activeList.noHeadingTasks().length - 1].lineNumber + 1;
                 }
                 else {
-                    this.activeTask.heading = this.plugin.architect.activeList.headings.filter(heading => heading.raw = value)[0];
+                    this.activeTask.heading = this.plugin.architect.activeList.headings.filter(heading => heading.raw === value)[0];
                     this.activeTask.lineNumber = this.activeTask.heading.lineNumber + this.activeTask.heading.children.length + 1;
                 }
             });
@@ -91,6 +91,13 @@ export class TextInputModal extends Modal {
         input.onChange(value => {
             this.inputText = value;
         });
+
+        input.inputEl.addEventListener('keydown', (e) => {
+            if (e.key === "Enter") {
+                this.callback(this.plugin, { ...this.activeTask, formatted: this.inputText });
+                this.close(); // Close the modal after submission
+            }
+        })
 
         // Create a submit button
         const submitButton = new ButtonComponent(this.contentEl);

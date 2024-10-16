@@ -39,21 +39,21 @@ export class List {
     async initialize() {
         this.content = await this.plugin.app.vault.read(this.file).then((content) => content.split("\n"));
         let activeHeading = null;
-        for (let line of this.content) {
-            if (line.startsWith("#")) {
+        for (let i = 0; i < this.content.length; i++) {
+            if (/^#{1,6}\s+.*$/.test(this.content[i])) {
                 if (activeHeading) this.headings.push(activeHeading);
                 activeHeading = {
-                    lineNumber: this.content.indexOf(line),
-                    raw: line,
+                    lineNumber: i,
+                    raw: this.content[i],
                     children: []
                 };
             }
-            else if (line !== "") {
+            else if (this.content[i] !== "") {
                 const task = {
-                    raw: line,
-                    formatted: line.replace(/^\s*(-\s*(\[ \]|\[x\])?|[0-9]+\.)\s+/, ''),
-                    lineNumber: this.content.indexOf(line),
-                    type: this.detectListType(line),
+                    raw: this.content[i],
+                    formatted: this.content[i].replace(/^\s*(-\s*(\[ \]|\[x\])?|[0-9]+\.)\s+/, ''),
+                    lineNumber: i,
+                    type: this.detectListType(this.content[i]),
                     heading: activeHeading
                 };
                 this.tasks.push(task);
@@ -114,13 +114,13 @@ export class List {
     }
 
     public modifyItem( task: Task ) {
-        console.log(task)
         this.content.splice(task.lineNumber, 1, `${this.computePrefix(task)}${task.formatted}`);
         this.saveContent();
     }
 
     private async saveContent() {
-        await this.plugin.app.vault.modify(this.file, this.content.join("\n"));
+        console.log(this.content)
+        await this.plugin.app.vault.modify(this.file, this.content.join("\n"), {});
     }
 
 }
